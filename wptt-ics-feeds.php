@@ -1,0 +1,177 @@
+<?php
+/*
+Plugin Name: WPTT ICS Feeds
+Plugin URI: http://wpthemetutorial.com/plugins/wptt-ics-feeds/
+Description: Adds an ICS compatible feed for future posts
+Version: 1.0
+Author: WP Theme Tutorial, Curtis McHale
+Author URI: http://wpthemetutorial.com
+License: GPLv2 or later
+*/
+
+/**
+ * @todo filter `where` so that we get 2 months around now
+ * @todo make sure that we can get feeds for specific authors
+ * @todo make sure that we can let authors define a post status
+ * @todo probably need to add all the feeds to the user profile
+ */
+
+/*
+This program is free software; you can redistribute it and/or
+modify it under the terms of the GNU General Public License
+as published by the Free Software Foundation; either version 2
+of the License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+*/
+
+class WPTT_ICS_Feeds{
+
+	function __construct(){
+
+		// Register hooks that are fired when the plugin is activated, deactivated, and uninstalled, respectively.
+		register_activation_hook( __FILE__, array( $this, 'activate' ) );
+		register_deactivation_hook( __FILE__, array( $this, 'deactivate' ) );
+		register_uninstall_hook( __FILE__, array( __CLASS__, 'uninstall' ) );
+
+		$this->constants();
+		$this->includes();
+
+		add_action( 'init', array( $this, 'add_new_feed' ) );
+
+	} // construct
+
+	/**
+	 * Adds our new feed endpoint so users can subscribe to a calendar
+	 *
+	 * @since 1.0
+	 * @author WP Theme Tutorial, Curtis McHale
+	 * @access public
+	 *
+	 * @uses add_feed()     Adds a feed endpoint at location in first param
+	 */
+	public function add_new_feed(){
+		add_feed( 'wptticsfeeds', array( $this, 'generate_feed' ) );
+	} // add_new_feed
+
+	/**
+	 * Actually queries and builds our calendar items
+	 *
+	 * @since 1.0
+	 * @author WP Theme Tutorial, Curtis McHale
+	 * @access public
+	 *
+	 * @uses EasyPeasyICS()                 Does our heavy lifting for ICS feeds
+	 * @uses EasyPeasyICS->add_event()      Adds events to our ICS feeds
+	 * @uses wp_reset_post_data()           Resets the post data so we don't stomp all over WP_Query globals and stuff
+	 * @uses EasyPeasyICS->render()         Actually renders the calendar feed we want
+	 * @uses $wp_query                      Global WP_Query object so we can capture userid in the feed
+	 * @uses get_the_ID()                   Gets us the post_id in the loop
+	 * @uses the_time()                     Returns the time given time format
+	 * @uses get_the_title()                Returns the post title given post_id
+	 * @uses get_the_excerpt()              Gets post excerpt
+	 * @uses get_permalink()                Gets the post permalink
+	 */
+	public function generate_feed(){
+
+		$ics = new EasyPeasyICS();
+
+		$args = array(
+			'post_status'     => array( 'publish', 'future' ),
+			'posts_per_page'  => -1
+		);
+
+		date_default_timezone_set( get_option('timezone_string') );
+
+		$feed = new WP_Query( $args );
+
+		if ( $feed->have_posts() ) : while ( $feed->have_posts() ) : $feed->the_post();
+
+			$starttime      = get_the_time( 'U' );
+			$endtime        = strtotime( '+10 minutes', $starttime );
+			$summary        = get_the_title( get_the_ID() );
+			$description    = get_the_excerpt();
+			$url            = get_permalink( get_the_ID() );
+
+			$ics->addEvent( $starttime, $endtime, $summary, $description, $url );
+
+		endwhile; else:
+
+		endif;
+
+		wp_reset_postdata();
+
+		$ics->render();
+
+	} // generate_feed
+
+	/**
+	 * Includes any files we need for our plugin
+	 *
+	 * @since 1.0
+	 * @author  WP Theme Tutorial, Curtis McHale
+	 * @access private
+	 */
+	private function includes(){
+
+		include( WPTT_ICS_FEED_FOLDER . '/EasyPeasyICS.php' );
+
+	} // includes
+
+	/**
+	 * Defines any constants we need for the site
+	 *
+	 * @since 1.0
+	 * @author WP Theme Tutorial, Curtis McHale
+	 * @access public
+	 */
+	public function constants(){
+		define( 'WPTT_ICS_FEED_FOLDER', dirname( __FILE__ ) );
+	} // constants
+
+	/**
+	 * Fired when plugin is activated
+	 *
+	 * @param   bool    $network_wide   TRUE if WPMU 'super admin' uses Network Activate option
+	 */
+	public function activate( $network_wide ){
+
+		// need to have something that requires a rewrite update
+		$this->add_new_feed();
+
+		// makes sure our rewrite rules are set
+		flush_rewrite_rules();
+
+	} // activate
+
+	/**
+	 * Fired when plugin is deactivated
+	 *
+	 * @param   bool    $network_wide   TRUE if WPMU 'super admin' uses Network Activate option
+	 */
+	public function deactivate( $network_wide ){
+
+		// makes sure our rewrite rules are set
+		flush_rewrite_rules();
+
+	} // deactivate
+
+	/**
+	 * Fired when plugin is uninstalled
+	 *
+	 * @param   bool    $network_wide   TRUE if WPMU 'super admin' uses Network Activate option
+	 */
+	public function uninstall( $network_wide ){
+
+	} // uninstall
+
+} // WPTT_ICS_Feed
+
+$GLOBALS['wptt_ics_feeds'] = new WPTT_ICS_Feeds();
