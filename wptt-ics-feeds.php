@@ -3,7 +3,7 @@
 Plugin Name: WPTT ICS Feeds
 Plugin URI: http://wpthemetutorial.com/plugins/wptt-ics-feeds/
 Description: Adds an ICS compatible feed for future posts
-Version: 1.0
+Version: 1.1
 Author: WP Theme Tutorial, Curtis McHale
 Author URI: http://wpthemetutorial.com
 License: GPLv2 or later
@@ -11,7 +11,6 @@ License: GPLv2 or later
 
 /**
  * @todo filter `where` so that we get 2 months around now
- * @todo make sure that we can get feeds for specific authors
  * @todo make sure that we can let authors define a post status
  * @todo probably need to add all the feeds to the user profile
  */
