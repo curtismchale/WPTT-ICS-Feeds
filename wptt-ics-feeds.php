@@ -3,7 +3,7 @@
 Plugin Name: WPTT ICS Feeds
 Plugin URI: http://wpthemetutorial.com/plugins/wptt-ics-feeds/
 Description: Adds an ICS compatible feed for future posts
-Version: 1.0
+Version: 1.1
 Author: WP Theme Tutorial, Curtis McHale
 Author URI: http://wpthemetutorial.com
 License: GPLv2 or later
@@ -11,7 +11,6 @@ License: GPLv2 or later
 
 /**
  * @todo filter `where` so that we get 2 months around now
- * @todo make sure that we can get feeds for specific authors
  * @todo make sure that we can let authors define a post status
  * @todo probably need to add all the feeds to the user profile
  */
@@ -45,6 +44,7 @@ class WPTT_ICS_Feeds{
 		$this->includes();
 
 		add_action( 'init', array( $this, 'add_new_feed' ) );
+		add_filter( 'query_vars', array( $this, 'add_user_query_var' ) );
 
 	} // construct
 
@@ -60,6 +60,22 @@ class WPTT_ICS_Feeds{
 	public function add_new_feed(){
 		add_feed( 'wptticsfeeds', array( $this, 'generate_feed' ) );
 	} // add_new_feed
+
+	/**
+	 * Lets WP know we have a new query arguement
+	 *
+	 * @since 1.0
+	 * @author WP Theme Tutorial, Curtis McHale
+	 * @access public
+	 *
+	 * @param   array   $qv     required    The existing array of query args
+	 *
+	 * @return  array   $qv     Our modified query args
+	 */
+	public function add_user_query_var( $qv ){
+		$qv[] = 'wpttauthor';
+		return $qv;
+	} // add_user_query_var
 
 	/**
 	 * Actually queries and builds our calendar items
@@ -78,6 +94,7 @@ class WPTT_ICS_Feeds{
 	 * @uses get_the_title()                Returns the post title given post_id
 	 * @uses get_the_excerpt()              Gets post excerpt
 	 * @uses get_permalink()                Gets the post permalink
+	 * @uses $this->filter_by_author()      Filters the query and adds the author name so we only get posts by that author
 	 */
 	public function generate_feed(){
 
@@ -87,6 +104,11 @@ class WPTT_ICS_Feeds{
 			'post_status'     => array( 'publish', 'future' ),
 			'posts_per_page'  => -1
 		);
+
+		// use the author param if it's set
+		if ( isset( $_GET['wpttauthor'] ) ){
+			$args = $this->filter_by_author( $args, $_GET['wpttauthor'] );
+		}
 
 		date_default_timezone_set( get_option('timezone_string') );
 
@@ -111,6 +133,28 @@ class WPTT_ICS_Feeds{
 		$ics->render();
 
 	} // generate_feed
+
+	/**
+	 * Takes our author query arg and adds it to the exising Query.
+	 *
+	 * @since 1.1
+	 * @author WP Theme Tutorial, Curtis McHale
+	 * @access private
+	 *
+	 * @param array     $args     required     The existing query args
+	 * @param string    $nicename requride     The author nicename so we can use it to modify the query
+	 *
+	 * @return array    $updated_args          The updated WP_Query args now that we have the author parameter
+	 */
+	private function filter_by_author( $args, $nicename ){
+
+		$author_args = array( 'author_name' => esc_attr( $nicename ) );
+
+		$updated_args = array_merge( $author_args, $args );
+
+		return $updated_args;
+
+	} // filter_by_author
 
 	/**
 	 * Includes any files we need for our plugin
