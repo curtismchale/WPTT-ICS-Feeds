@@ -46,7 +46,70 @@ class WPTT_ICS_Feeds{
 		add_action( 'init', array( $this, 'add_new_feed' ) );
 		add_filter( 'query_vars', array( $this, 'add_user_query_var' ) );
 
+		add_action( 'show_user_profile', array( $this, 'show_links' ) );
+		add_action( 'edit_user_profile', array( $this, 'show_links' ) );
+
 	} // construct
+
+	/**
+	 * Shows any links we may have to subscribe to our posts feeds
+	 *
+	 * @since 1.1
+	 * @author SFNdesign, Curtis McHale
+	 * @access private
+	 */
+	public function show_links( $user ){
+	?>
+
+		<h3>ICS Feed Links</h3>
+
+		<table class="form-table">
+
+			<tr>
+				<th><label for="company">Links</label></th>
+
+				<td>
+					<p><a href="<?php echo $this->get_subscribe_link(); ?>">All Posts</a></p>
+					<p><a href="<?php echo $this->get_subscribe_link( array( 'author' => $user->ID ) ); ?>"><?php echo $user->display_name; ?> Posts Only</a></p>
+					<span class="description">Copy the link (right click and copy link address) and subscribe to the link in your calendar program.</span>
+				</td>
+			</tr>
+
+		</table>
+
+	<?php
+	} // show_links
+
+	/**
+	 * Gets us any links we have and allows us to change things around based on arguements
+	 *
+	 * @since 1.1
+	 * @author WP Theme Tutorial, Curtis McHale
+	 * @access private
+	 *
+	 * @param array     $args    optional       Any arguements we have
+	 *
+	 * @return string   The built out link depending on $args
+	 *
+	 * @uses wp_get_current_user()              Gets the current user object
+	 * @uses site_url()                         Gets the site url for us
+	 */
+	private function get_subscribe_link( $args = array() ){
+
+		$user = get_userdata( (int) $args['author'] );
+
+		$link = site_url() . '/?feed=wptticsfeeds';
+
+		if ( isset( $args ) && is_array( $args ) ){
+
+			// adding author feed links
+			if ( isset( $args['author'] ) ) $link = $link . '&wpttauthor=' . $user->user_login;
+
+		} // if
+
+		return $link;
+
+	} // get_subscribe_link
 
 	/**
 	 * Adds our new feed endpoint so users can subscribe to a calendar
