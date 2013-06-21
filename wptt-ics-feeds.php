@@ -93,17 +93,19 @@ class WPTT_ICS_Feeds{
 	 *
 	 * @uses wp_get_current_user()              Gets the current user object
 	 * @uses site_url()                         Gets the site url for us
+	 * @uses esc_url()                          We like to keep things safe with safe URL's
 	 */
 	private function get_subscribe_link( $args = array() ){
-
-		$user = get_userdata( (int) $args['author'] );
 
 		$link = site_url() . '/?feed=wptticsfeeds';
 
 		if ( isset( $args ) && is_array( $args ) ){
 
 			// adding author feed links
-			if ( isset( $args['author'] ) ) $link = $link . '&wpttauthor=' . $user->user_login;
+			if ( isset( $args['author'] ) ){
+				$user = get_userdata( (int) $args['author'] );
+				$link = $link . '&wpttauthor=' . $user->user_login;
+			}
 
 		} // if
 
