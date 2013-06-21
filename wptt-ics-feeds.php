@@ -55,7 +55,7 @@ class WPTT_ICS_Feeds{
 	 * Shows any links we may have to subscribe to our posts feeds
 	 *
 	 * @since 1.1
-	 * @author SFNdesign, Curtis McHale
+	 * @author WP Theme Tutorial, Curtis McHale
 	 * @access private
 	 */
 	public function show_links( $user ){
@@ -107,7 +107,7 @@ class WPTT_ICS_Feeds{
 
 		} // if
 
-		return $link;
+		return esc_url( $link );
 
 	} // get_subscribe_link
 
