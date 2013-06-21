@@ -38,6 +38,7 @@ You can set the author by using the `wpttauthor` query arg and the author nicena
 = 1.1 =
 
 - added author query param
+- added links to the user page so they are obvious to find
 
 = 1.0 =
 
