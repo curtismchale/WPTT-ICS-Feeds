@@ -3,14 +3,13 @@
 Plugin Name: WPTT ICS Feeds
 Plugin URI: http://wpthemetutorial.com/plugins/wptt-ics-feeds/
 Description: Adds an ICS compatible feed for future posts
-Version: 1.2
+Version: 1.3
 Author: WP Theme Tutorial, Curtis McHale
 Author URI: http://wpthemetutorial.com
 License: GPLv2 or later
 */
 
 /**
- * @todo filter `where` so that we get 2 months around now
  * @todo make sure that we can let authors define a post status
  * @todo do some obfuscation so that it's harder to just get the feed if you know the author name
  */
@@ -177,7 +176,11 @@ class WPTT_ICS_Feeds{
 
 		date_default_timezone_set( get_option('timezone_string') );
 
+		add_filter( 'posts_where', array( $this, 'two_months' ) );
+
 		$feed = new WP_Query( $args );
+
+		remove_filter( 'posts_where', array( $this, 'two_months' ) );
 
 		if ( $feed->have_posts() ) : while ( $feed->have_posts() ) : $feed->the_post();
 
@@ -198,6 +201,22 @@ class WPTT_ICS_Feeds{
 		$ics->render();
 
 	} // generate_feed
+
+	/**
+	 * Adds a where clause to our posts so that we get 6 weeks back in time.
+	 *
+	 * @since 1.2
+	 * @author WP Theme Tutorial, Curtis McHale
+	 * @access public
+	 */
+	public function two_months( $where ){
+
+		$how_old = apply_filters( 'wptt_ics_feeds_how_old', '-6 weeks' );
+
+		$where .= " AND post_date > '" . date('Y-m-d', strtotime( $how_old )) . "'";
+		return $where;
+
+	} // two_months
 
 	/**
 	 * Takes our author query arg and adds it to the exising Query.
