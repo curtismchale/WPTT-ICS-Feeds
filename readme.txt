@@ -10,11 +10,7 @@ Subscribe to your published and future posts.
 
 == Description ==
 
-Adds an ICS compatible feed of your published and future posts.
-
-WARNING: If you have thousands of posts this is probably pretty expensive. As the Lorax says:
-
-"You have been warned!" (insert crazy eyes and finger pointing)
+Adds an ICS compatible feed of your published and future posts. By default we get 1 month ahead and behind the current day.
 
 == Installation ==
 
@@ -32,6 +28,10 @@ WARNING: If you have thousands of posts this is probably pretty expensive. As th
 URL locations for your feeds can be found on your user profile. Currently there are feeds for all posts and for each author.
 
 == Changelog ==
+
+= 1.2 =
+
+- we now get posts from one month behind and one month ahead of the current day
 
 = 1.1 =
 
