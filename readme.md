@@ -3,7 +3,7 @@
 Contributors: Curtis McHale
 Tags: calendar, ICS
 Requires at least: 3.4
-Tested up to: 3.5
+Tested up to: 3.9
 Stable tag: 1.3
 
 ~Current Version:1.3~
