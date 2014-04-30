@@ -4,7 +4,7 @@ Contributors: Curtis McHale
 Tags: calendar, ICS
 Requires at least: 3.4
 Tested up to: 3.9
-Stable tag: 1.3
+Stable tag: 1.4
 
 Subscribe to your published and future posts.
 
@@ -29,6 +29,10 @@ Get the feed links from your user profile and subscribe to the feeds from Google
 URL locations for your feeds can be found on your user profile. Currently there are feeds for all posts and for each author.
 
 == Changelog ==
+
+= 1.4 =
+
+- mainly just automating deployment to .org from github
 
 = 1.2 =
 
