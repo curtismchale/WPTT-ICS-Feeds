@@ -4,7 +4,7 @@ Contributors: Curtis McHale
 Tags: calendar, ICS
 Requires at least: 3.4
 Tested up to: 5.5.1
-Stable tag: 1.4.1
+Stable tag: 1.4.2
 
 Subscribe to your published and future posts.
 

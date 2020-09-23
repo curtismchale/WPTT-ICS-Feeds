@@ -1,11 +1,11 @@
 <?php
 /*
 Plugin Name: WPTT ICS Feeds
-Plugin URI: http://wpthemetutorial.com/plugins/wptt-ics-feeds/
+Plugin URI: https://curtismchale.ca
 Description: Adds an ICS compatible feed for future posts
-Version: 1.4
+Version: 1.4.2
 Author: curtismchale
-Author URI: http://wpthemetutorial.com
+Author URI: https://curtismchale.ca
 License: GPLv2 or later
 */
 
