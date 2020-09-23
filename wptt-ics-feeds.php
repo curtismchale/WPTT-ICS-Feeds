@@ -94,7 +94,7 @@ class WPTT_ICS_Feeds{
 	 * @uses site_url()                         Gets the site url for us
 	 * @uses esc_url()                          We like to keep things safe with safe URL's
 	 */
-	private function get_subscribe_link( $args = array() ){
+	public function get_subscribe_link( $args = array() ){
 
 		$link = site_url() . '/?feed=wptticsfeeds';
 
