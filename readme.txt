@@ -1,6 +1,6 @@
 === WPTT ICS Feeds ===
 
-Contributors: Curtis McHale
+Contributors: curtismchale
 Tags: calendar, ICS
 Requires at least: 3.4
 Tested up to: 5.5.1
