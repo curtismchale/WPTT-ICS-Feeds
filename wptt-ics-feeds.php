@@ -174,7 +174,9 @@ class WPTT_ICS_Feeds{
 			$args = $this->filter_by_author( $args, $_GET['wpttauthor'] );
 		}
 
-		date_default_timezone_set( get_option('timezone_string') );
+		$timezone_string = $this->get_timezone_string();
+
+		date_default_timezone_set( $timezone_string );
 
 		add_filter( 'posts_where', array( $this, 'two_months' ) );
 
@@ -201,6 +203,23 @@ class WPTT_ICS_Feeds{
 		$ics->render();
 
 	} // generate_feed
+
+	/**
+	 * Returns the timezone string from the DB or defaults to UTC if none in DB
+	 *
+	 * @since 1.4.4
+	 */
+	public function get_timezone_string(){
+
+		$string = get_option( 'timezone_string' );
+
+		if ( ! isset( $string ) || empty( $string ) ){
+			$string = 'UTC';
+		}
+
+		return $string;
+
+	}
 
 	/**
 	 * Adds a where clause to our posts so that we get 6 weeks back in time.
