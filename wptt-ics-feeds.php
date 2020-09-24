@@ -3,7 +3,7 @@
 Plugin Name: WPTT ICS Feeds
 Plugin URI: https://curtismchale.ca
 Description: Adds an ICS compatible feed for future posts
-Version: 1.4.2
+Version: 1.4.4
 Author: curtismchale
 Author URI: https://curtismchale.ca
 License: GPLv2 or later

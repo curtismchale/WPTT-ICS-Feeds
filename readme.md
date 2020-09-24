@@ -4,9 +4,9 @@ Contributors: Curtis McHale
 Tags: calendar, ICS
 Requires at least: 3.4
 Tested up to: 5.5.1
-Stable tag: 1.4.3
+Stable tag: 1.4.4
 
-~Current Version:1.4.3~
+~Current Version:1.4.4~
 
 ## Description
 
@@ -29,6 +29,10 @@ Get the feed links from your user profile and subscribe to the feeds from Google
 URL locations for your feeds can be found on your user profile. Currently there are feeds for all posts and for each author.
 
 ## Changelog
+
+### 1.4.4
+
+- adding unit tests and fixing minor issues tests revealed
 
 ### 1.4
 
