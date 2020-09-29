@@ -25,13 +25,11 @@ class TestFilters extends WP_UnitTestCase {
 
 		add_filter(	'wptt_ics_feeds_how_old', array( $this, 'new_where' ), 10, 2 );
 
-		 $output = $this->plugin->two_months( 'nothing' );
+		 $output = $this->plugin->two_months( '' );
 
 		 $date = date('Y-m-d', strtotime( $this->new_where() ) );
 
 		 $this->assertStringContainsString( $date, $output, 'The date filter did not work' );
-
-		//echo $output;
 
 	}
 
