@@ -29,4 +29,4 @@ jobs:
                   key: ${{ runner.os }}-wp-cli
 
             - name: Run tests
-              run: .github/run-tests
+              run: sudo .github/run-tests
